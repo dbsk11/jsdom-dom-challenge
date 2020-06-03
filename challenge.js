@@ -5,32 +5,33 @@ document.addEventListener('DOMContentLoaded', function(e){
     const likesList = document.querySelector("body > ul")
 
     let timerRunning = true
+    let currentNum = parseInt(counter.innerText)
 
-    timer = setInterval(function(){ 
-        currentNum = parseInt(counter.innerText)
-        currentNum += 1
-        counter.innerText = currentNum 
-    }, 1000);
+    startTimer()
 
-    // document.querySelector("#minus").addEventListener('click', amIWorking)
+    function startTimer(){
+        timer = setInterval(function(){ 
+            currentNum = parseInt(counter.innerText)
+            currentNum += 1
+            counter.innerText = currentNum 
+        }, 1000);
+    }
 
-    
-    
     buttons.forEach((btn) => {
         btn.addEventListener('click', (e)=> {
             buttonClick(e)
         })
     })
 
+    
+
     function buttonClick(e){
         switch (e.target.id) {
             case "minus":
-                currentNum = parseInt(counter.innerText)
                 currentNum -= 1
                 counter.innerText = currentNum 
                 break
             case "plus":
-                currentNum = parseInt(counter.innerText)
                 currentNum += 1
                 counter.innerText = currentNum 
                 break
@@ -58,11 +59,7 @@ document.addEventListener('DOMContentLoaded', function(e){
                         }
                     })
                 } else {
-                    timer = setInterval(function(){ 
-                        currentNum = parseInt(counter.innerText)
-                        currentNum += 1
-                        counter.innerText = currentNum 
-                    }, 1000);
+                    startTimer()
                     pauseButton.innerText = "pause"
                     timerRunning = true
                     buttons.forEach((btn) => {
