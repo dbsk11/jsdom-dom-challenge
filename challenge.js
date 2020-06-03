@@ -74,9 +74,13 @@ document.addEventListener('DOMContentLoaded', function(e){
                 break
             case "submit":
                 e.preventDefault()
-                comment = document.createElement("div")
-                comment.innerText = e.target.value
-                console.log(e)
+                commentList = document.querySelector("#list")
+                comment = document.querySelector("#comment-input").value
+                document.querySelector("#comment-input").value = ""
+                commentDiv = document.createElement("div")
+                commentDiv.innerText = comment
+                commentList.appendChild(commentDiv)
+                console.log(commentDiv)
                 break
         }
     }
