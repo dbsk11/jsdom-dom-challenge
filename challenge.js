@@ -1,89 +1,88 @@
-document.addEventListener('DOMContentLoaded', function(e){
-    const counter = document.querySelector("#counter")
-    const buttons = document.querySelectorAll('button')
-    const pauseButton = document.querySelector("#pause")
-    const likesList = document.querySelector("body > ul")
+//increment the counter
+//find the counter element/node
+//increase that counter every second 
 
-    let timerRunning = true
-    let currentNum = parseInt(counter.innerText)
+const counter = document.getElementById('counter')
+const minusButton = document.getElementById('minus')
+const plusButton = document.getElementById('plus')
+const heartButton = document.getElementById('heart')
+const pauseButton  = document.getElementById('pause')
+const submitButton = document.querySelector("#submit")
+const likesUL = document.querySelector("body > ul")
+const commentsDiv = document.querySelector("#list")
 
-    startTimer()
+let isTimerRunning = true
 
-    function startTimer(){
-        timer = setInterval(function(){ 
-            currentNum = parseInt(counter.innerText)
-            currentNum += 1
-            counter.innerText = currentNum 
-        }, 1000);
+
+
+let timer = setInterval(incrementCounter, 1000);
+
+function incrementCounter(){
+    let number = parseInt(counter.innerText)
+    number++
+    counter.innerText = number
+}
+
+function decrementCounter(){
+    let number = parseInt(counter.innerText)
+    number--
+    counter.innerText = number
+}
+
+plusButton.addEventListener('click', incrementCounter)
+minusButton.addEventListener('click', decrementCounter)
+heartButton.addEventListener('click', function(e){
+    let liExist = document.getElementById(`${counter.innerText}Likes`)
+    if (liExist){
+        let likes = parseInt(liExist.dataset.likes)
+        likes += 1
+        liExist.dataset.likes = likes 
+        liExist.innerText = `${counter.innerText} has been liked ${liExist.dataset.likes} times`
+    }else {
+        let likeLI = document.createElement('li')
+        likeLI.dataset.likes = 1
+        likeLI.id = `${counter.innerText}Likes`
+        likeLI.innerText = `${counter.innerText} has been liked ${likeLI.dataset.likes} time`
+        likesUL.append(likeLI)
     }
-
-    buttons.forEach((btn) => {
-        btn.addEventListener('click', (e)=> {
-            buttonClick(e)
-        })
-    })
-
-    
-
-    function buttonClick(e){
-        switch (e.target.id) {
-            case "minus":
-                currentNum -= 1
-                counter.innerText = currentNum 
-                break
-            case "plus":
-                currentNum += 1
-                counter.innerText = currentNum 
-                break
-            case "heart":
-                let likeLI = document.getElementById(`${counter.innerText} likes`)
-                if (likeLI) {
-                    likeLI.dataset.likeCounter = parseInt(likeLI.dataset.likeCounter) + 1
-                    likeLI.innerText = `${counter.innerText} has been liked ${likeLI.dataset.likeCounter} times`
-                } else {
-                    let like = document.createElement("LI")
-                    like.id = `${counter.innerText} likes`
-                    like.dataset.likeCounter = 1
-                    like.innerText = `${counter.innerText} has been liked ${like.dataset.likeCounter} time`
-                    likesList.appendChild(like)
-                }
-                break
-            case "pause":
-                if (timerRunning === true) {
-                    clearInterval(timer)
-                    pauseButton.innerText = "resume"
-                    timerRunning = false
-                    buttons.forEach((btn) => {
-                        if (btn.id != "pause"){
-                            btn.disabled = true
-                        }
-                    })
-                } else {
-                    startTimer()
-                    pauseButton.innerText = "pause"
-                    timerRunning = true
-                    buttons.forEach((btn) => {
-                        if (btn.id != "pause"){
-                            btn.disabled = false
-                        }
-                    })
-                }
-                break
-            case "submit":
-                e.preventDefault()
-                commentList = document.querySelector("#list")
-                comment = document.querySelector("#comment-input").value
-                document.querySelector("#comment-input").value = ""
-                commentDiv = document.createElement("div")
-                commentDiv.innerText = comment
-                commentList.appendChild(commentDiv)
-                console.log(commentDiv)
-                break
-        }
-    }
-    
-    function amIWorking(e){
-        console.log(e.target.id)
-    }
-
 })
+pauseButton.addEventListener('click', function(e){
+    if (isTimerRunning === true) {
+        clearInterval(timer)
+        pauseButton.innerText = 'resume'
+        minusButton.disabled = true
+        plusButton.disabled = true
+        heartButton.disabled = true
+        submitButton.disabled = true
+        isTimerRunning = false
+    } else {
+        timer = setInterval(incrementCounter, 1000);
+        pauseButton.innerText = 'pause'
+        minusButton.disabled = false
+        plusButton.disabled = false
+        heartButton.disabled = false
+        submitButton.disabled = false
+        isTimerRunning = true
+    }
+})
+
+submitButton.addEventListener('click', function(e){
+    e.preventDefault()
+    let commentDiv = document.createElement('div')
+    let comment = document.querySelector("#comment-input").value
+    document.querySelector("#comment-input").value = ''
+    commentDiv.innerText = comment
+    commentsDiv.append(commentDiv)
+})
+
+
+// plusButton.addEventListener('click', function(e){
+//     incrementCounter()
+// })
+// minusButton.addEventListener('click', function(e){
+//     decrementCounter()
+// })
+
+
+
+
